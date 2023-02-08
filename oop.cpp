@@ -6,6 +6,10 @@
 
 using namespace std;
 
+void cls(void) {
+	system("cls");
+}
+
 int login(void) {
 	string pass = "";
 	char ch;
@@ -27,7 +31,7 @@ int login(void) {
 		cout << "\n\n\n\t\t\t\t\tAccess Granted!! \n\n\n";
 		cout << "\n\t\t\t\t\t";
 		system("pause");
-		system("cls");
+		cls();
 	}
 	else {
 		cout << "\n\n\t\t\t\t\tAccess Aborted...\n";
@@ -37,7 +41,7 @@ int login(void) {
 }
 
 class Employee {
-public:
+private:
 	string Name;
 	char Id[5];
 	char Designation[20];
@@ -54,8 +58,10 @@ public:
 		cout << "\n---------------------";
 	}
 
+
+
 	void listEmployees(void) {
-		system("cls");
+		cls();
 		fstream myFile;
 		myFile.open("data.txt");
 		cout << "\n\t\tList of Employees" << endl;
@@ -74,8 +80,8 @@ public:
 		}
 	}
 
-	void showDetails(void) { 
-		system("cls");
+	void showDetails(void) {
+		cls();
 		fstream myFile;
 		char checkId[5];
 		bool found = false;
@@ -113,7 +119,7 @@ public:
 	}
 
 	void editExisting(void) {
-		system("cls");
+		cls();
 		char checkId[5];
 		string newDesignation;
 		int newCtc;
@@ -137,10 +143,10 @@ public:
 			while (myFile >> Name >> Id >> Designation >> Age >> Ctc >> Experience) {
 				if (strcmp(Id, checkId) == 0) {
 					cout << endl << "Altering";
-					tempFile << Name << " " << Id << " " << newDesignation << " " << Age << " " << newCtc << " " << Experience << "\n";
+					tempFile << Name << " " << Id << " " << newDesignation << " " << Age << " " << newCtc << " " << Experience << endl;
 				}
 				else {
-					tempFile << Name << " " << Id << " " << Designation << " " << Age << " " << Ctc << " " << Experience << "\n";
+					tempFile << Name << " " << Id << " " << Designation << " " << Age << " " << Ctc << " " << Experience << endl;
 				}
 			}
 			myFile.close(); tempFile.close();
@@ -148,15 +154,135 @@ public:
 			int renamed = rename("temp.txt", "data.txt");
 			waitForEnter();
 		}
+		else
+			cout << "Unable to Open File.";
 	}
+
+	void addNewEmployee(void) {
+		lines();
+		cout << "\nEnter First Name of Employee: ";
+		cin >> Name;
+		lines();
+		cout << "\nEnter Employee ID [max 4 digits]: ";
+		cin >> Id;
+		lines();
+		cout << "\nEnter Designation: ";
+		cin >> Designation;
+		lines();
+		cout << "\nEnter Employee Age: ";
+		cin >> Age;
+		lines();
+		cout << "\nEnter Employee CTC: ";
+		cin >> Ctc;
+		lines();
+		cout << "\nEnter Employee Experience";
+		cin >> Experience;
+		lines();
+
+		char save;
+		cout << "\nEnter 'y' to save information\n";
+		cin >> save;
+		if (save == 'y' || save == 'Y') {
+			fstream myFile;
+			myFile.open("data.txt", ios::app);
+			myFile << Name << " " << Id << " " << Designation << " " << Age << " " << Ctc << " " << Experience << endl;
+			myFile.close();
+			cout << "Employee added successfully";
+		}
+		else
+			addNewEmployee();
+		waitForEnter();
+	}
+
+	void deleteEmployee(void) {
+		cls();
+		char checkId[5];
+		lines();
+		cout << "Enter Employee Id to Remove: ";
+		cin >> checkId;
+		char confirm;
+		cout << "\n\nCONFIRMATION\nEnter 'y' to confirm DELETION.";
+		cin >> confirm;
+		if (confirm == 'y' || confirm == 'Y') {
+			fstream myFile, tempFile;
+			myFile.open("data.txt", ios::in);
+			tempFile.open("data.txt", ios::out);
+			while (myFile >> Name >> Id >> Designation >> Age >> Ctc >> Experience) {
+				if (strcmp(Id, checkId) != 0)
+					tempFile << Name << " " << Id << " " << Designation << " " << Age << " " << Ctc << " " << Experience << endl;
+			}
+			myFile.close(); tempFile.close();
+			remove("data.txt");
+			rename("temp.txt", "data.txt");
+			cout << "Removed Successfully\n";
+			waitForEnter();
+		}
+		else
+			deleteEmployee();
+	}
+
+public:
+
+	void options(void) { //menu
+		login();//login screen
+		while (true) {
+			cls();
+
+			// Options to choose an action
+			cout << "\n\t\t\t>>>>>>>>>  EMPLOYEE MANAGEMENT SYSTEM  <<<<<<<<<";
+			cout << "\n";
+			cout << "\n\t\t\t------------------------------------------------";
+			cout << "\n\t\t\tENTER   1:   To View List of Employees";
+			cout << "\n\t\t\t------------------------------------------------";
+			cout << "\n\t\t\tENTER   2:   To View Employee Details";
+			cout << "\n\t\t\t------------------------------------------------";
+			cout << "\n\t\t\tENTER   3:   To Modify Existing Employee Details";
+			cout << "\n\t\t\t------------------------------------------------";
+			cout << "\n\t\t\tENTER   4:   To Add New Employee Details";
+			cout << "\n\t\t\t------------------------------------------------";
+			cout << "\n\t\t\tENTER   5:   To Remove an Employee Details";
+			cout << "\n\t\t\t------------------------------------------------";
+			cout << "\n\t\t\tENTER   0:   To Exit     ";
+			cout << "\n\t\t\t------------------------------------------------";
+			cout << "\n\n\t\t\t   Please Enter Your Choice: ";
+
+			// Taking the action input
+			int choice;
+			cin >> choice;
+			// Calling relevant function as per choice
+			switch (choice) {
+			case 0:
+				cls();
+				cout << "\n\nEMPLOYEE MANAGEMENT SYSTEM \n\nBrought To You By Muhammad Mubashir\n\n";
+				Sleep(1000);
+				return;
+			case 1:
+				listEmployees();
+				break;
+			case 2:
+				showDetails();
+				break;
+			case 3:
+				editExisting();
+				break;
+			case 4:
+				addNewEmployee();
+				break;
+			case 5:
+				deleteEmployee();
+				break;
+			default:
+				cout << "\n Sorry! I don't understand that! \n";
+				break;
+			}
+			system("pause");
+		}
+	}
+
 };
 
 int main(void) {
 	login();
-	Employee Employee1;
-	Employee1.listEmployees();
-	Employee1.showDetails();
-	Employee1.editExisting();
-	Employee1.showDetails();
-	Employee1.listEmployees();
+	Employee e;
+	e.options();
 }
