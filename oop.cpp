@@ -51,14 +51,12 @@ private:
 
 	void waitForEnter(void) {
 		cout << endl << endl << endl << "Press Enter to go back." << endl << endl;
-		system("pause=13");
+		system("pause");
 	}
 
 	void lines(void) {
 		cout << "\n---------------------";
 	}
-
-
 
 	void listEmployees(void) {
 		cls();
@@ -142,7 +140,7 @@ private:
 		{
 			while (myFile >> Name >> Id >> Designation >> Age >> Ctc >> Experience) {
 				if (strcmp(Id, checkId) == 0) {
-					cout << endl << "Altering";
+					cout << endl << "\nAltering";
 					tempFile << Name << " " << Id << " " << newDesignation << " " << Age << " " << newCtc << " " << Experience << endl;
 				}
 				else {
@@ -150,8 +148,8 @@ private:
 				}
 			}
 			myFile.close(); tempFile.close();
-			int removed = remove("data.txt");
-			int renamed = rename("temp.txt", "data.txt");
+			remove("data.txt");
+			rename("temp.txt", "data.txt");
 			waitForEnter();
 		}
 		else
@@ -159,6 +157,7 @@ private:
 	}
 
 	void addNewEmployee(void) {
+		cls();
 		lines();
 		cout << "\nEnter First Name of Employee: ";
 		cin >> Name;
@@ -175,7 +174,7 @@ private:
 		cout << "\nEnter Employee CTC: ";
 		cin >> Ctc;
 		lines();
-		cout << "\nEnter Employee Experience";
+		cout << "\nEnter Employee Experience: ";
 		cin >> Experience;
 		lines();
 
@@ -185,9 +184,9 @@ private:
 		if (save == 'y' || save == 'Y') {
 			fstream myFile;
 			myFile.open("data.txt", ios::app);
-			myFile << Name << " " << Id << " " << Designation << " " << Age << " " << Ctc << " " << Experience << endl;
+			myFile << endl << Name << " " << Id << " " << Designation << " " << Age << " " << Ctc << " " << Experience << endl;
 			myFile.close();
-			cout << "Employee added successfully";
+			cout << "\nEmployee added successfully\n";
 		}
 		else
 			addNewEmployee();
@@ -198,15 +197,15 @@ private:
 		cls();
 		char checkId[5];
 		lines();
-		cout << "Enter Employee Id to Remove: ";
+		cout << "\nEnter Employee Id to Remove: ";
 		cin >> checkId;
 		char confirm;
-		cout << "\n\nCONFIRMATION\nEnter 'y' to confirm DELETION.";
+		cout << "\n\nCONFIRMATION\nEnter 'y' to confirm DELETION.\n\n";
 		cin >> confirm;
 		if (confirm == 'y' || confirm == 'Y') {
 			fstream myFile, tempFile;
 			myFile.open("data.txt", ios::in);
-			tempFile.open("data.txt", ios::out);
+			tempFile.open("temp.txt", ios::out);
 			while (myFile >> Name >> Id >> Designation >> Age >> Ctc >> Experience) {
 				if (strcmp(Id, checkId) != 0)
 					tempFile << Name << " " << Id << " " << Designation << " " << Age << " " << Ctc << " " << Experience << endl;
@@ -223,12 +222,10 @@ private:
 
 public:
 
-	void options(void) { //menu
-		login();//login screen
+	void options(void) {
+		login();
 		while (true) {
 			cls();
-
-			// Options to choose an action
 			cout << "\n\t\t\t>>>>>>>>>  EMPLOYEE MANAGEMENT SYSTEM  <<<<<<<<<";
 			cout << "\n";
 			cout << "\n\t\t\t------------------------------------------------";
@@ -244,16 +241,14 @@ public:
 			cout << "\n\t\t\t------------------------------------------------";
 			cout << "\n\t\t\tENTER   0:   To Exit     ";
 			cout << "\n\t\t\t------------------------------------------------";
-			cout << "\n\n\t\t\t   Please Enter Your Choice: ";
+			cout << "\n\n\t\t\tPlease Enter Your Choice: ";
 
-			// Taking the action input
 			int choice;
 			cin >> choice;
-			// Calling relevant function as per choice
 			switch (choice) {
 			case 0:
 				cls();
-				cout << "\n\nEMPLOYEE MANAGEMENT SYSTEM \n\nBrought To You By Muhammad Mubashir\n\n";
+				cout << "\n\nEMPLOYEE MANAGEMENT SYSTEM\n\nBROUGHT TO YOU BY MUHAMMAD MUBASHIR\n\n";
 				Sleep(1000);
 				return;
 			case 1:
@@ -272,17 +267,17 @@ public:
 				deleteEmployee();
 				break;
 			default:
-				cout << "\n Sorry! I don't understand that! \n";
+				cout << "\nSorry Wrong Option!\n";
 				break;
 			}
 			system("pause");
 		}
 	}
-
 };
 
 int main(void) {
-	login();
 	Employee e;
 	e.options();
+	getch();
+	return 0;
 }
